@@ -1,22 +1,18 @@
 %define upstream_name    Net-SSH-Expect
 %define upstream_version 1.09
 
-Name:       perl-%{upstream_name}
-%if %mdkversion > 200900
-Version:    %perl_convert_version %{upstream_version}
-%else
-Version:    %{upstream_version}
-%endif
-Release:    %mkrel 2
-Summary:    An ssh wrapper to execute remote commands
-License:    GPL+ or Artistic
-Group:      Development/Perl
-Url:        http://search.cpan.org/dist/%{upstream_name}
-Source0:    http://www.cpan.org/modules/by-module/Net/%{upstream_name}-%{upstream_version}.tar.gz
+Name:		perl-%{upstream_name}
+Version:	%perl_convert_version %{upstream_version}
+Release:	3
+Summary:	An ssh wrapper to execute remote commands
+License:	GPL+ or Artistic
+Group:		Development/Perl
+Url:		http://search.cpan.org/dist/%{upstream_name}
+Source0:	http://www.cpan.org/modules/by-module/Net/%{upstream_name}-%{upstream_version}.tar.gz
 
-BuildRequires: perl(Expect)
-BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+BuildRequires:	perl-devel
+BuildRequires:	perl(Expect)
+BuildArch:	noarch
 
 %description
 This module is a wrapper to the _ssh_ executable that is available in your
@@ -41,24 +37,29 @@ need that you can't do with the 'exec()' method.
 %setup -q -n %{upstream_name}-%{upstream_version}
 
 %build
-%{__perl} Makefile.PL INSTALLDIRS=vendor
-
-%{make}
+perl Makefile.PL INSTALLDIRS=vendor
+%make
 
 %check
-%{make} test
+%make test
 
 %install
-rm -rf %buildroot
 %makeinstall_std
 
-%clean
-rm -rf %buildroot
-
 %files
-%defattr(-,root,root)
 %doc Changes README
 %{_mandir}/man3/*
-%perl_vendorlib/*
+%{perl_vendorlib}/*
+
+%changelog
+* Mon Apr 18 2011 Funda Wang <fwang@mandriva.org> 1.90.0-2mdv2011.0
++ Revision: 655144
+- rebuild for updated spec-helper
+
+* Thu Oct 29 2009 Guillaume Rousse <guillomovitch@mandriva.org> 1.90.0-1mdv2011.0
++ Revision: 460113
+- import perl-Net-SSH-Expect
 
 
+* Thu Oct 29 2009 Guillaume Rousse <guillomovitch@mandriva.org> 0.0.0-1mdv2010.0
+- initial mdv release, generated with cpan2dist
